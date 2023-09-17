@@ -3,11 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tu Título Aquí</title>
+    <title>Proyecto-BasesII</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+    <!-- Seccion del menu principal-->
+    <button class="menuButton" id="modCli">Módulo de cliente</button>
+    <button class="menuButton" id="modProv">Módulo de proveedores</button>
+    <button class="menuButton" id="modInv">Módulo de inventarios</button>
+    <button class="menuButton" id="modVen">Módulo de ventas</button>
+    <button class="menuButton" id="modEst">Datos estadísticos</button>  
+    <button class="backButton" style="display: none;" id="goBack">Volver</button>
+
+    <!-- =================================================================================== -->
+    <!-- Seccion del modulo de cliente -->
+    <div id="cont1" class="inputContainer" style="display: none;">
+        <input id="filterCli0" value="" class="input" type="text" placeholder="Ingrese un nombre"></input>
+        <input id="filterCli1" value="" class="input" type="text" placeholder="Ingrese una categoria"></input>
+        <input id="filterCli2" value="" class="input" type="text" placeholder="Ingrese un metodo de entrega"></input>
+
+        <center><table id="tableClient" border="1"> 
+            <tr>
+                <td>Nombre del cliente</td>
+                <td>Categoría</td>
+                <td>Método de entrega</td>
+            </tr>
+            
+        </table></center>
+    </div>
+
 
     <script src="index.js"></script> <!-- Enlaza tu archivo JavaScript aquí -->
 </body>

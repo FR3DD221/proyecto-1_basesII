@@ -1,0 +1,42 @@
+.menuButton {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    width: 200px;
+    height: 50px;
+    display: block;
+    margin: 100px auto 5px;
+}
+
+.backButton {
+    padding: 10px 20px;
+    cursor: pointer;
+    position: absolute;
+    font-weight: bold;
+    font-size: 20px;
+    width: 200px;
+    height: 50px;
+    bottom: 10px;
+    left: 10px;
+}
+
+.input[type="text"] {
+    appearance: none;
+    border: none;
+    outline: none;
+    font-size: larger;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 200;
+    border-bottom: 0.2em solid #e91e63;
+    background: rgba(#e91e63, 0.2);
+    border-radius: 0.2em 0.2em 0 0;
+    padding: 0.4em;
+    color: #e91e63;
+    width: 400px;
+    margin-bottom: 70px;
+    margin-top: 40px; 
+}
+
+.inputContainer {
+    text-align: center; 
+}
