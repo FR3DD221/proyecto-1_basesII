@@ -55,7 +55,7 @@ app.use(cors());
 const config = {
   user: 'RestFullApi',
   password: 'true',
-  server: 'LAPTOP-KGGQABLE', // Cambia esto a la dirección de tu servidor SQL Server
+  server: 'True', // Cambia esto a la dirección de tu servidor SQL Server
   database: 'WideWorldImporters',
   options: {
     trustServerCertificate: true, 
@@ -66,6 +66,7 @@ const config = {
 //=========================================================================Read=================================================================
 // Rutas de la API
 app.get('/customers', async (req, res) => {
+
     try {
         const pool = await sql.connect(config);
         const result = await pool.request()
@@ -85,6 +86,7 @@ app.get('/customers', async (req, res) => {
       res.status(500).send('Error en el servidor');
     }
   });
+
 
 
 app.get('/Suppliers', async (req, res) => {
@@ -126,18 +128,44 @@ app.get('/StockItems', async (req, res) => {
 
 
 
-//========================listen
 
-app.use(bodyParser.json());
-
-app.post('/datos', (req, res) => {
+app.post('/cli', async (req, res) => {
+  try {
     const dataReceived = req.body;
     filt1 = dataReceived.filtro1;
     filt2 = dataReceived.filtro2;
     filt3 = dataReceived.filtro3;
-    console.log('Datos recibidos:', dataReceived);
-    // Puedes enviar una respuesta al cliente si es necesario
+
+    // Realizar una solicitud fetch
+    const response = await fetch("http://localhost:8000/customers");
+
+    if (!response.ok) {
+      throw new Error("La solicitud fetch no tuvo éxito");
+    }
+
+    const data = await response.json();
+
+    // Realizar cualquier procesamiento necesario con los datos
+
+    // Crear un objeto de respuesta
+    const outputData = {
+      mensaje: 'Datos procesados correctamente',
+      resultado: data  // Utiliza los datos de la respuesta de la solicitud fetch
+    };
+
+    // Enviar datos de salida como JSON
+    res.json(outputData);
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    res.status(500).json({ mensaje: 'Error en la solicitud' }); // Manejar errores de manera adecuada
+  }
 });
+
+
+//========================listen
+
+app.use(bodyParser.json());
+
 
 
 //==============================================

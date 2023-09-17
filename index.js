@@ -81,23 +81,6 @@ function blanquearTabla(nameTable) {
 }
 
 //Modulo cliente boton
-async function getDataClient() {
-  btnConC.disabled = true;
-  try {
-    const response = await fetch("http://localhost:8000/customers");
-
-    if (!response.ok) {
-      throw new Error("La solicitud fetch no tuvo éxito");
-    }
-    const data = await response.json();
-
-    blanquearTabla("tableClient");
-    fillTableC(data);
-  } catch (error) {
-    console.error("Error en la solicitud fetch:", error);
-  }
-  btnConC.disabled = false;
-}
 
 btnConC.addEventListener("click", function () { 
     var textData = {
@@ -106,7 +89,7 @@ btnConC.addEventListener("click", function () {
         filtro3: inpCli2.value,
     };
 
-    const url1 = "http://localhost:8000/datos";
+    const url1 = "http://localhost:8000/cli";
 
     fetch(url1, {
         method: "POST",
@@ -114,8 +97,23 @@ btnConC.addEventListener("click", function () {
         "Content-Type": "application/json",
         },
         body: JSON.stringify(textData),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error('La solicitud fetch no tuvo éxito');
+      }
+      return response.json(); // Convertir la respuesta a JSON
+    })
+    .then((data) => {
+      // Consultar los datos de la respuesta de la API
+
+      blanquearTabla("tableClient");
+      fillTableC(data.resultado);
+    })
+    .catch((error) => {
+      console.error('Error en la solicitud:', error);
     });
-    getDataClient();
+
+
 });
 
 function fillTableC(clientData) {
