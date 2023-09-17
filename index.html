@@ -22,16 +22,24 @@
         <input id="filterCli1" value="" class="input" type="text" placeholder="Ingrese una categoria"></input>
         <input id="filterCli2" value="" class="input" type="text" placeholder="Ingrese un metodo de entrega"></input>
 
-        <center><table id="tableClient" border="1"> 
-            <tr>
-                <td>Nombre del cliente</td>
-                <td>Categoría</td>
-                <td>Método de entrega</td>
-            </tr>
-            
-        </table></center>
+        <button id="consultC" class="menuButton">Consultar</button>
+
+        <center><div class="table">
+            <center><table id="tableClient" border="1">
+                <thead>
+                    <tr>
+                        <th>Nombre del cliente</th>
+                        <th>Categoría</th>
+                        <th>Metodo de entrega</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table></center>
+        </div></center>
     </div>
 
+    <dialog id="pop-it" onclick="close()"></dialog>
 
     <script src="index.js"></script> <!-- Enlaza tu archivo JavaScript aquí -->
 </body>

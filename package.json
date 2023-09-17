@@ -9,6 +9,9 @@
   "author": "Fredd Badilla y Randall Corella",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "body-parse": "^0.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mssql": "^10.0.1"
   }
 }

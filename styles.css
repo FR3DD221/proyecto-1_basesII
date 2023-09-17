@@ -8,6 +8,29 @@
     margin: 100px auto 5px;
 }
 
+/* Estilo para la barra de desplazamiento en navegadores WebKit (Safari, Chrome) */
+::-webkit-scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento */
+  }
+  
+  /* Estilo para el riel de la barra de desplazamiento en navegadores WebKit */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color del riel de la barra de desplazamiento */
+  }
+  
+  /* Estilo para el pulgar (scroll thumb) de la barra de desplazamiento en navegadores WebKit */
+  ::-webkit-scrollbar-thumb {
+    background: #888; /* Color del pulgar de la barra de desplazamiento */
+  }
+  
+
+.table {
+    margin-top: 60px;
+    overflow: auto; 
+    max-height: 400px;
+    width: 23%;
+}
+
 .backButton {
     padding: 10px 20px;
     cursor: pointer;
