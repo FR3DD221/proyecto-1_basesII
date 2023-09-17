@@ -5,7 +5,7 @@ const cors = require('cors');
 const express = require('express');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 
 var filt1 = "";
@@ -15,7 +15,7 @@ var filt3 = "";
 
 const query1 = `
 
-SELECT * FROM Sales.Customers cus 
+SELECT CustomerName, CustomerCategoryName, DeliveryMethodName FROM Sales.Customers cus 
 								  INNER JOIN Sales.CustomerCategories cat ON cus.CustomerCategoryID = cat.CustomerCategoryID
 								  INNER JOIN [Application].[DeliveryMethods] del ON  del.DeliveryMethodId = cus.DeliveryMethodID
 
@@ -45,7 +45,7 @@ WHERE StockItemName LIKE '%' + @miDato1 + '%' AND StockGroupName LIKE '%' + @miD
 ORDER BY StockItemName ASC;
 `;
 
- 
+
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
@@ -55,9 +55,11 @@ app.use(cors());
 const config = {
   user: 'RestFullApi',
   password: 'true',
-  server: 'True', // Cambia esto a la dirección de tu servidor SQL Server
+  server: 'LAPTOP-KGGQABLE', // Cambia esto a la dirección de tu servidor SQL Server
   database: 'WideWorldImporters',
-  encrypt: false,
+  options: {
+    trustServerCertificate: true, 
+  },
 };
 
 
@@ -71,7 +73,12 @@ app.get('/customers', async (req, res) => {
         .input('miDato2', sql.VARCHAR(50), filt2)
         .input('miDato3', sql.VARCHAR(50), filt3)
         .query(query1);
-        
+        filt1 = "";
+        filt2 = "";
+        filt3 = "";
+
+        sql.close();
+
         res.json(result.recordset);
     } catch (err) {
       console.error(err);
@@ -91,6 +98,8 @@ app.get('/Suppliers', async (req, res) => {
       .query(query2);
       
       res.json(result.recordset);
+      sql.close();
+
     } catch (err) {
       console.error(err);
       res.status(500).send('Error en el servidor');
@@ -107,6 +116,7 @@ app.get('/StockItems', async (req, res) => {
         .query(query3);
         
         res.json(result.recordset);
+        sql.close();
     } catch (err) {
         console.error(err);
         res.status(500).send('Error en el servidor');
@@ -130,30 +140,9 @@ app.post('/datos', (req, res) => {
 });
 
 
-
-//================Examples=====================
-
-const url1 = 'http://localhost:3000/datos';
-
-var textData = {
-    filtro1: "Gan",
-    filtro2: "",
-    filtro3: ""
-}
-
-fetch(url1, {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(textData)
-})
-
 //==============================================
 
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });
-
-  
