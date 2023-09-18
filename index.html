@@ -8,12 +8,12 @@
 </head>
 <body>
     <!-- Seccion del menu principal-->
-    <button class="menuButton" id="modCli">Módulo de cliente</button>
-    <button class="menuButton" id="modProv">Módulo de proveedores</button>
-    <button class="menuButton" id="modInv">Módulo de inventarios</button>
-    <button class="menuButton" id="modVen">Módulo de ventas</button>
-    <button class="menuButton" id="modEst">Datos estadísticos</button>  
-    <button class="backButton" style="display: none;" id="goBack">Volver</button>
+    <button class="glow-on-hover" id="modCli">Módulo de cliente</button>
+    <button class="glow-on-hover" id="modProv">Módulo de proveedores</button>
+    <button class="glow-on-hover" id="modInv">Módulo de inventarios</button>
+    <button class="glow-on-hover" id="modVen">Módulo de ventas</button>
+    <button class="glow-on-hover" id="modEst">Datos estadísticos</button>  
+    <button class="button" style="display: none;" id="goBack">Volver</button>
 
     <!-- =================================================================================== -->
     <!-- Seccion del modulo de cliente -->
@@ -22,16 +22,91 @@
         <input id="filterCli1" value="" class="input" type="text" placeholder="Ingrese una categoria"></input>
         <input id="filterCli2" value="" class="input" type="text" placeholder="Ingrese un metodo de entrega"></input>
 
-        <button id="consultC" class="menuButton">Consultar</button>
+        <button id="consultC" class="btn">Consultar</button>
 
-        <center><div class="table">
-            <center><table id="tableClient" border="1">
+        <center><div class="container">
+            <center><table id="tableClient" >
                 <thead>
                     <tr>
                         <th>Nombre del cliente</th>
                         <th>Categoría</th>
                         <th>Metodo de entrega</th>
-                    </tr>
+                        <th>Opciones</th>
+                    </tr>   
+                </thead>
+                <tbody>
+                </tbody>
+            </table></center>
+        </div></center>
+    </div>
+
+<!-- =================================================================================== -->
+    <!-- Seccion del modulo de proveedores -->
+    <div id="cont2" class="inputContainer" style="display: none;">
+        <input id="filterPro0" value="" class="input" type="text" placeholder="Nombre del proveedor"></input>
+        <input id="filterPro1" value="" class="input" type="text" placeholder="Ingrese una categoria"></input>
+        <input id="filterPro2" value="" class="input" type="text" placeholder="Ingrese un metodo de entrega"></input>
+
+        <button id="consultP" class="btn">Consultar</button>
+
+        <center><div class="container">
+            <center><table id="tableProv" >
+                <thead>
+                    <tr>
+                        <th>Nombre del proveedor</th>
+                        <th>Categoría</th>
+                        <th>Metodo de entrega</th>
+                        <th>Opciones</th>
+                    </tr>   
+                </thead>
+                <tbody>
+                </tbody>
+            </table></center>
+        </div></center>
+    </div>
+
+<!-- =================================================================================== -->
+    <!-- Seccion del modulo de inventarios -->
+    <div id="cont3" class="inputContainer" style="display: none;">
+        <input id="filterInv0" value="" class="input" type="text" placeholder="Ingrese un nombre de producto"></input>
+        <input id="filterInv1" value="" class="input" type="text" placeholder="Ingrese un grupo"></input>
+
+        <button id="consultI" class="btn">Consultar</button>
+
+        <center><div class="container">
+            <center><table id="tableInv" >
+                <thead>
+                    <tr>
+                        <th>Nombre del producto</th>
+                        <th>Grupo al que pertenece</th>
+                        <th>Holdings</th>
+                        <th>Opciones</th>
+                    </tr>   
+                </thead>
+                <tbody>
+                </tbody>
+            </table></center>
+        </div></center>
+    </div>
+
+<!-- =================================================================================== -->
+    <!-- Seccion del modulo de ventas -->
+    <div id="cont1" class="inputContainer" style="display: none;">
+        <input id="filterCli0" value="" class="input" type="text" placeholder="Ingrese un nombre"></input>
+        <input id="filterCli1" value="" class="input" type="text" placeholder="Ingrese una categoria"></input>
+        <input id="filterCli2" value="" class="input" type="text" placeholder="Ingrese un metodo de entrega"></input>
+
+        <button id="consultC" class="btn">Consultar</button>
+
+        <center><div class="container">
+            <center><table id="tableClient" >
+                <thead>
+                    <tr>
+                        <th>Nombre del cliente</th>
+                        <th>Categoría</th>
+                        <th>Metodo de entrega</th>
+                        <th>Opciones</th>
+                    </tr>   
                 </thead>
                 <tbody>
                 </tbody>

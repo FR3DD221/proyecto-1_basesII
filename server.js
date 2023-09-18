@@ -15,7 +15,7 @@ var filt3 = "";
 
 const query1 = `
 
-SELECT CustomerName, CustomerCategoryName, DeliveryMethodName FROM Sales.Customers cus 
+SELECT * FROM Sales.Customers cus 
 								  INNER JOIN Sales.CustomerCategories cat ON cus.CustomerCategoryID = cat.CustomerCategoryID
 								  INNER JOIN [Application].[DeliveryMethods] del ON  del.DeliveryMethodId = cus.DeliveryMethodID
 
@@ -55,7 +55,7 @@ app.use(cors());
 const config = {
   user: 'RestFullApi',
   password: 'true',
-  server: 'True', // Cambia esto a la dirección de tu servidor SQL Server
+  server: 'LAPTOP-KGGQABLE', // Cambia esto a la dirección de tu servidor SQL Server
   database: 'WideWorldImporters',
   options: {
     trustServerCertificate: true, 
