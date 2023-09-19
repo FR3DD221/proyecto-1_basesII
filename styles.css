@@ -279,3 +279,24 @@ tbody {
 .inputContainer {
     text-align: center; 
 }
+
+.input2[type="number"] {
+  appearance: none;
+  border: none;
+  outline: none;
+  font-size: larger;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 200;
+  border-bottom: 0.2em solid #e91e63;
+  background: rgba(#e91e63, 0.2);
+  border-radius: 0.2em 0.2em 0 0;
+  padding: 0.4em;
+  color: #e91e63;
+  width: 400px;
+  margin-bottom: 70px;
+  margin-top: 40px; 
+}
+
+.inputContainer {
+  text-align: center; 
+}

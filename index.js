@@ -25,6 +25,7 @@ const btnConP = document.getElementById("consultP");
 const cont3 = document.getElementById("cont3");
 const inpInv0 = document.getElementById("filterInv0");
 const inpInv1 = document.getElementById("filterInv1");
+const inpInv2 = document.getElementById("filterInv2");
 const tableI = document.getElementById("tableInv");
 const btnConI = document.getElementById("consultI");
 
@@ -261,6 +262,7 @@ btnConI.addEventListener("click", function () {
   var textData = {
       filtro1: inpInv0.value,
       filtro2: inpInv1.value,
+      filtro3: inpInv2.value,
   };
 
   const url1 = "http://localhost:8000/cli";
