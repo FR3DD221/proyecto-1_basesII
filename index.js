@@ -5,6 +5,8 @@ const btnVen = document.getElementById("modVen");
 const btnEst = document.getElementById("modEst");
 const btnBack = document.getElementById("goBack");
 
+const btnM = document.getElementById("closeModal");
+
 //=========================================================================
 const cont1 = document.getElementById("cont1");
 const inpCli0 = document.getElementById("filterCli0");
@@ -28,6 +30,13 @@ const inpInv1 = document.getElementById("filterInv1");
 const inpInv2 = document.getElementById("filterInv2");
 const tableI = document.getElementById("tableInv");
 const btnConI = document.getElementById("consultI");
+
+
+btnM.addEventListener("click", function () {
+  const x = document.getElementById("pop-it");
+  x.close()
+});
+
 
 //Variables para guardar datos de las consultas
 let tempC;
@@ -147,11 +156,11 @@ function fillTableC(clientData) {
   for (x = 0; x < clientData.length; x++) {
     var fila = document.createElement("tr");
     var nombreCliente = document.createElement("td");
-    nombreCliente.textContent = clientData[x].CustomerName;
+    nombreCliente.textContent = clientData[x].NombreCliente;
     var categoria = document.createElement("td");
-    categoria.textContent = clientData[x].CustomerCategoryName;
+    categoria.textContent = clientData[x].categoria;
     var metodoEntrega = document.createElement("td");
-    metodoEntrega.textContent = clientData[x].DeliveryMethodName;
+    metodoEntrega.textContent = clientData[x].DeliveryMethod;
 
     var boton = document.createElement("td");
     var botonElement = document.createElement("button");
@@ -177,7 +186,66 @@ function fillTableC(clientData) {
 function showDetailsC(id) {
   id = parseInt(id);
   const dialog = document.getElementById("pop-it");
-  dialog.innerHTML = tempC[id].CustomerName;
+  dialog.querySelector('#mapCon').innerHTML = "";
+  
+  var textos = [
+    "Nombre del cliente: " + tempC[id].NombreCliente,
+    "Categoría: " + tempC[id].categoria,
+    "Grupo de compra: " + tempC[id].grupoCompra,
+    "Contacto primario: " + tempC[id].contactoPrimario,
+    "Contacto secundario: " + tempC[id].contactoAlter,
+    "Cliente a facturar: " + tempC[id].clienteFacturar,
+    "Metodo de entrega: " + tempC[id].DeliveryMethod,
+    "Ciudad de entrega: " + tempC[id].direccion,
+    "Codigo postal: " + tempC[id].codigoPostal[0],
+    "Número de telefono: " + tempC[id].telefono,
+    "Número de fax: " + tempC[id].fax,
+    "Días de gracia para pagar: "+ tempC[id].diasP.toString(),
+    "",
+    "Dirección",
+    "",
+    "Dirección: " + tempC[id].direccionDelivery,
+    "Codigo postal: "+ tempC[id].codigoPostal[1]
+  ];
+
+  for (var i = 0; i < textos.length; i++) {
+    var nuevoParrafo = document.createElement("p");
+    nuevoParrafo.textContent = textos[i];
+    dialog.querySelector('#mapCon').appendChild(nuevoParrafo);
+  }
+  
+  link = document.createElement("a");
+  link.textContent = "Más información";
+  link.href = tempC[id].pagina;
+  dialog.querySelector('#mapCon').appendChild(link);
+  var nuevoParrafo = document.createElement("p");
+  nuevoParrafo.textContent = "Ubicación en maps"
+  dialog.querySelector('#mapCon').appendChild(nuevoParrafo);
+
+  
+  latitud = tempC[id].DeliveryLocation.points[0].x;
+  longitud = tempC[id].DeliveryLocation.points[0].y;
+
+  var existingMapContainer = document.getElementById('map');
+  if (existingMapContainer) {
+      existingMapContainer.remove();
+  }
+
+  var mapContainer = document.createElement('div');
+  mapContainer.id = 'map';
+  mapContainer.style.width = '100%';
+  mapContainer.style.height = '400px';
+
+  document.getElementById('mapCon').appendChild(mapContainer);
+
+  var map = L.map('map').setView([latitud, longitud], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  L.marker([latitud, longitud]).addTo(map);
+  
   dialog.showModal();
 }
 

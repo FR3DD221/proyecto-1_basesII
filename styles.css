@@ -170,7 +170,7 @@ body {
 
 .container {
 	position: absolute;
-	top: 50%;
+	top: 65%;
 	left: 50%;
 	transform: translate(-50%, -50%);
   max-height: 300px;
@@ -299,4 +299,40 @@ tbody {
 
 .inputContainer {
   text-align: center; 
+}
+
+
+.dialog1 {
+	padding: 1rem 3rem;
+  width: 60%;
+  height: 70%;
+  background: linear-gradient(45deg, #e177dd, #5f2c82);
+	max-width: 400px;
+	padding-top: 2rem;
+	border-radius: 20px;
+	border: 0;
+  color: aliceblue;
+	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
+	animation: fadeIn 1s ease both;
+	&::backdrop {
+		animation: fadeIn 1s ease both;
+		background:  rgba(255, 25, 25, 0.4);
+		z-index: 2;
+		backdrop-filter: blur(20px);
+	}
+	h2 {
+		font-weight: 600;
+		font-size: 2rem;
+		padding-bottom: 1rem;
+	}
+	p {
+		font-size: 1rem;
+		line-height: 1.3rem;
+		padding: 0.5rem 0;
+		a {
+			&:visited {
+				color: rgb(var(--vs-primary));
+			}
+		}
+	}
 }

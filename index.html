@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proyecto-BasesII</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
     <!-- Seccion del menu principal-->
@@ -115,8 +116,13 @@
         </div></center>
     </div>
 
-    <dialog id="pop-it" onclick="close()"></dialog>
 
-    <script src="index.js"></script> <!-- Enlaza tu archivo JavaScript aquí -->
+    <dialog class="dialog1" id="pop-it">
+        <center><div id="mapCon"></div></center>
+        <button id="closeModal" class="glow-on-hover">Cerrar</button>
+    </dialog>
+
+    <script src="index.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </body>
 </html>
