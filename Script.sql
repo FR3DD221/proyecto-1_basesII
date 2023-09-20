@@ -15,15 +15,19 @@ CREATE PROCEDURE BuscarClientesConFiltros
     @miDato3 NVARCHAR(50) = ''
 AS
 BEGIN
-    SELECT *
-    FROM Sales.Customers cus
-    INNER JOIN Sales.CustomerCategories cat ON cus.CustomerCategoryID = cat.CustomerCategoryID
-    INNER JOIN [Application].[DeliveryMethods] del ON del.DeliveryMethodId = cus.DeliveryMethodID
+
+	SELECT * FROM Sales.Customers cus 
+				INNER JOIN Sales.CustomerCategories cat ON cus.CustomerCategoryID = cat.CustomerCategoryID
+				INNER JOIN [Application].[DeliveryMethods] del ON  del.DeliveryMethodId = cus.DeliveryMethodID
+				INNER JOIN [Sales].[BuyingGroups] bg ON cus.BuyingGroupID = bg.BuyingGroupID
+				INNER JOIN [Application].[People] p1 ON p1.PersonID = cus.PrimaryContactPersonID
+				INNER JOIN [Application].[People] p2 ON p2.PersonID = cus.AlternateContactPersonID
+				INNER JOIN Sales.Customers cus2 ON cus.BillToCustomerID = cus2.CustomerID
     WHERE
-        CustomerName LIKE '%' + @miDato1 + '%'
+        cus.CustomerName LIKE '%' + @miDato1 + '%'
         AND CustomerCategoryName LIKE '%' + @miDato2 + '%'
         AND DeliveryMethodName LIKE '%' + @miDato3 + '%'
-    ORDER BY CustomerName ASC;
+    ORDER BY cus.CustomerName ASC;
 END;
 
 --Buscar provedores===================================================================================
