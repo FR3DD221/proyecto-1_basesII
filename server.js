@@ -13,37 +13,16 @@ var filt2 = "";
 var filt3 = "";
 
 
-const query1 = `
 
-SELECT * FROM Sales.Customers cus 
-								  INNER JOIN Sales.CustomerCategories cat ON cus.CustomerCategoryID = cat.CustomerCategoryID
-								  INNER JOIN [Application].[DeliveryMethods] del ON  del.DeliveryMethodId = cus.DeliveryMethodID
+//EXEC BuscarClientesConFiltros  '',  '',  '';
+//EXEC BuscarProvedoresConFiltros  '',  '',  '';
+//EXEC BuscarStockItemsConFiltros '','';
 
-WHERE CustomerName LIKE '%' + @miDato1 + '%' AND CustomerCategoryName LIKE '%' + @miDato2 + '%' AND DeliveryMethodName LIKE '%' + @miDato3 + '%' 
-ORDER BY CustomerName ASC;
+const query1 = `BuscarClientesConFiltros  @miDato1, @miDato2, @miDato3`;
 
-`;
+const query2 = `BuscarProvedoresConFiltros  @miDato1, @miDato2, @miDato3`;
 
-const query2 = `
-
-SELECT * FROM [Purchasing].[Suppliers] sup 
-								  INNER JOIN [Purchasing].[SupplierCategories] cat ON sup.SupplierCategoryID = cat.SupplierCategoryID
-								  INNER JOIN [Application].[DeliveryMethods] del ON  del.DeliveryMethodId = sup.DeliveryMethodID
-
-WHERE SupplierName LIKE '%' + @miDato1 + '%' AND SupplierCategoryName LIKE '%' + @miDato2 + '%' AND DeliveryMethodName LIKE '%' + @miDato3 + '%' 
-ORDER BY SupplierName ASC;
-
-`;
-
-const query3 = `
-
-SELECT * FROM [Warehouse].[StockItems] items 
-					INNER JOIN [Warehouse].[StockItemStockGroups] itg ON items.StockItemID = itg.StockItemID
-					INNER JOIN [Warehouse].[StockGroups] groups ON groups.StockGroupID = itg.StockGroupID
-
-WHERE StockItemName LIKE '%' + @miDato1 + '%' AND StockGroupName LIKE '%' + @miDato2 + '%' 
-ORDER BY StockItemName ASC;
-`;
+const query3 = `BuscarStockItemsConFiltros  @miDato1, @miDato2`;
 
 
 // Middleware
@@ -55,7 +34,7 @@ app.use(cors());
 const config = {
   user: 'RestFullApi',
   password: 'true',
-  server: 'LAPTOP-KGGQABLE', // Cambia esto a la dirección de tu servidor SQL Server
+  server: 'True', // Cambia esto a la dirección de tu servidor SQL Server
   database: 'WideWorldImporters',
   options: {
     trustServerCertificate: true, 
@@ -68,6 +47,7 @@ const config = {
 app.get('/customers', async (req, res) => {
 
     try {
+
         const pool = await sql.connect(config);
         const result = await pool.request()
         .input('miDato1', sql.VARCHAR(50), filt1)
