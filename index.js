@@ -251,7 +251,6 @@ function showDetailsC(id) {
 
 
 //Modulo cliente proveedor
-/*
 btnConP.addEventListener("click", function () { 
   var textData = {
       filtro1: inpPro0.value,
@@ -259,7 +258,7 @@ btnConP.addEventListener("click", function () {
       filtro3: inpPro2.value,
   };
 
-  const url1 = "http://localhost:8000/cli";
+  const url1 = "http://localhost:8000/prov";
 
   fetch(url1, {
       method: "POST",
@@ -278,7 +277,7 @@ btnConP.addEventListener("click", function () {
 
     blanquearTabla("tableProv");
     tempP = data.resultado;
-    fillTableC(data.resultado);
+    fillTableP(data.resultado);
   })
   .catch((error) => {
     console.error('Error en la solicitud:', error);
@@ -289,11 +288,11 @@ function fillTableP(clientProv) {
   for (x = 0; x < clientProv.length; x++) {
     var fila = document.createElement("tr");
     var nombreCliente = document.createElement("td");
-    nombreCliente.textContent = clientProv[x].CustomerName;
+    nombreCliente.textContent = clientProv[x].supplierName;
     var categoria = document.createElement("td");
-    categoria.textContent = clientProv[x].CustomerCategoryName;
+    categoria.textContent = clientProv[x].categoryName;
     var metodoEntrega = document.createElement("td");
-    metodoEntrega.textContent = clientProv[x].DeliveryMethodName;
+    metodoEntrega.textContent = clientProv[x].metodoEntrega;
 
     var boton = document.createElement("td");
     var botonElement = document.createElement("button");
@@ -312,20 +311,80 @@ function fillTableP(clientProv) {
     fila.appendChild(metodoEntrega);
     fila.appendChild(boton);
 
-    tableC.querySelector("tbody").appendChild(fila);
+    tableP.querySelector("tbody").appendChild(fila);
   }
 }
 
 function showDetailsP(id) {
   id = parseInt(id);
   const dialog = document.getElementById("pop-it");
-  dialog.innerHTML = tempP[id].CustomerName;
+  dialog.querySelector('#mapCon').innerHTML = "";
+
+  var textos = [
+    "Codigo del proveedor: " + tempP[id].reference,
+    "Nombre del proveedor: " + tempP[id].supplierName,
+    "Categoria: " + tempP[id].categoryName,
+    "Contacto primario: " + tempP[id].contactoPrimario,
+    "Contacto secundario: " + tempP[id].contactoSec,
+    "Metodo de entrega: " + tempP[id].metodoEntrega,
+    "Ciudad de entrega: " + tempP[id].ciudad,
+    "Codigo postal de entrega: " + tempP[id].codigoPostal,
+    "Número de telefono: " + tempP[id].telefono,
+    "Número de fax: " + tempP[id].fax,
+    "Nombre del banco: " + tempP[id].bank,
+    "Numero de cuenta corriente: " + tempP[id].bankNumber,
+    "Días de gracia para pagar: " + tempP[id].dias.toString(),
+    "",
+    "Dirección",
+    "Direccion de entrega: " + tempP[id].direccionDelivery,
+    "Codigo postal de entrega: " + tempP[id].deliveryPostal, 
+    "",
+  ];
+
+  for (var i = 0; i < textos.length; i++) {
+    var nuevoParrafo = document.createElement("p");
+    nuevoParrafo.textContent = textos[i];
+    dialog.querySelector('#mapCon').appendChild(nuevoParrafo);
+  }
+  
+  link = document.createElement("a");
+  link.textContent = "Más información";
+  link.href = tempP[id].pagina;
+  dialog.querySelector('#mapCon').appendChild(link);
+  var nuevoParrafo = document.createElement("p");
+  nuevoParrafo.textContent = "Ubicación en maps"
+  dialog.querySelector('#mapCon').appendChild(nuevoParrafo);
+
+  
+  latitud = tempP[id].deliveryLocation.points[0].x;
+  longitud = tempP[id].deliveryLocation.points[0].y;
+
+  var existingMapContainer = document.getElementById('map');
+  if (existingMapContainer) {
+      existingMapContainer.remove();
+  }
+
+  var mapContainer = document.createElement('div');
+  mapContainer.id = 'map';
+  mapContainer.style.width = '100%';
+  mapContainer.style.height = '400px';
+
+  document.getElementById('mapCon').appendChild(mapContainer);
+
+  var map = L.map('map').setView([latitud, longitud], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  L.marker([latitud, longitud]).addTo(map);
+  
+
   dialog.showModal();
 }
-*/
+
 
 //Modulo cliente inventario
-/*
 btnConI.addEventListener("click", function () { 
   var textData = {
       filtro1: inpInv0.value,
@@ -333,7 +392,7 @@ btnConI.addEventListener("click", function () {
       filtro3: inpInv2.value,
   };
 
-  const url1 = "http://localhost:8000/cli";
+  const url1 = "http://localhost:8000/inv";
 
   fetch(url1, {
       method: "POST",
@@ -352,7 +411,7 @@ btnConI.addEventListener("click", function () {
 
     blanquearTabla("tableInv");
     tempI = data.resultado;
-    fillTableC(data.resultado);
+    fillTableI(data.resultado);
   })
   .catch((error) => {
     console.error('Error en la solicitud:', error);
@@ -360,14 +419,15 @@ btnConI.addEventListener("click", function () {
 });
 
 function fillTableI(clientInv) {
+  
   for (x = 0; x < clientInv.length; x++) {
     var fila = document.createElement("tr");
     var nombreCliente = document.createElement("td");
-    nombreCliente.textContent = clientInv[x].CustomerName;
+    nombreCliente.textContent = clientInv[x].StockItemName;
     var categoria = document.createElement("td");
-    categoria.textContent = clientInv[x].CustomerCategoryName;
+    categoria.textContent = clientInv[x].SuppliernName;
     var metodoEntrega = document.createElement("td");
-    metodoEntrega.textContent = clientInv[x].DeliveryMethodName;
+    metodoEntrega.textContent = clientInv[x].cantidad;
 
     var boton = document.createElement("td");
     var botonElement = document.createElement("button");
@@ -386,14 +446,62 @@ function fillTableI(clientInv) {
     fila.appendChild(metodoEntrega);
     fila.appendChild(boton);
 
-    tableC.querySelector("tbody").appendChild(fila);
+    tableI.querySelector("tbody").appendChild(fila);
   }
 }
 
 function showDetailsI(id) {
   id = parseInt(id);
   const dialog = document.getElementById("pop-it");
-  dialog.innerHTML = tempI[id].CustomerName;
+  dialog.querySelector('#mapCon').innerHTML = "";
+
+  var textos = [
+    "Nombre del producto: " + tempI[id].StockItemName,
+    "Nombre del proveedor: " + tempI[id].SuppliernName,
+    "Color: " + tempI[id].color,
+    "Unidad de empaquetamiento: " + tempI[id].UnitPackage,
+    "Empaquetamiento: " + tempI[id].outerPackage,
+    "Precio venta: " + tempI[id].precio,
+    "Peso: " + tempI[id].peso,
+    "Palabras claves: " + tempI[id].palabrasClave,
+    "Cantidad de empaquetamiento : " + tempI[id].cantidad,
+    "Marca: " + tempI[id].Marca,
+    "Tallas / tamaño : " + tempI[id].talla,
+    "Impuesto: " + tempI[id].Tax,
+    "Precio unitario: " + tempI[id].precioUnitario,
+    "Cantidad disponible: " + tempI[id].cantidadMano,
+  ];
+
+  for (var i = 0; i < textos.length; i++) {
+    var nuevoParrafo = document.createElement("p");
+    nuevoParrafo.textContent = textos[i];
+    dialog.querySelector('#mapCon').appendChild(nuevoParrafo);
+  }
+
+  
+  latitud = tempI[id].DeliveryLocation.points[0].x;
+  longitud = tempI[id].DeliveryLocation.points[0].y;
+
+  var existingMapContainer = document.getElementById('map');
+  if (existingMapContainer) {
+      existingMapContainer.remove();
+  }
+
+  var mapContainer = document.createElement('div');
+  mapContainer.id = 'map';
+  mapContainer.style.width = '100%';
+  mapContainer.style.height = '400px';
+
+  document.getElementById('mapCon').appendChild(mapContainer);
+
+  var map = L.map('map').setView([latitud, longitud], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  L.marker([latitud, longitud]).addTo(map);
+  
+  
   dialog.showModal();
 }
-*/

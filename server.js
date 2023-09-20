@@ -22,14 +22,14 @@ const query1 = `BuscarClientesConFiltros  @miDato1, @miDato2, @miDato3`;
 
 const query2 = `BuscarProvedoresConFiltros  @miDato1, @miDato2, @miDato3`;
 
-const query3 = `BuscarStockItemsConFiltros  @miDato1, @miDato2`;
+const query3 = `BuscarStockItemsConFiltros  @miDato1, @miDato2, @miDato3`;
 
 
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
-//LAPTOP-KGGQABLE
+
 // Configura la cadena de conexión
 const config = {
   user: 'RestFullApi',
@@ -69,15 +69,18 @@ app.get('/customers', async (req, res) => {
 
 
 
-app.get('/Suppliers', async (req, res) => {
+app.get('/suppliers', async (req, res) => {
     try {
 
       const pool = await sql.connect(config);
       const result = await pool.request()
-      .input('miDato1', sql.VARCHAR(50), '')
-      .input('miDato2', sql.VARCHAR(50), '')
-      .input('miDato3', sql.VARCHAR(50), '')
+      .input('miDato1', sql.VARCHAR(50), filt1)
+      .input('miDato2', sql.VARCHAR(50), filt2)
+      .input('miDato3', sql.VARCHAR(50), filt3)
       .query(query2);
+      filt1 = "";
+      filt2 = "";
+      filt3 = "";
       
       res.json(result.recordset);
       sql.close();
@@ -88,15 +91,20 @@ app.get('/Suppliers', async (req, res) => {
     }
   });
 
-app.get('/StockItems', async (req, res) => {
+app.get('/stockItems', async (req, res) => {
     try {
 
         const pool = await sql.connect(config);
         const result = await pool.request()
-        .input('miDato1', sql.VARCHAR(50), '')
-        .input('miDato2', sql.VARCHAR(50), '')
+        .input('miDato1', sql.VARCHAR(50), filt1)
+        .input('miDato2', sql.VARCHAR(50), filt2)
+        .input('miDato3', sql.Int, filt3)
         .query(query3);
+        filt1 = "";
+        filt2 = "";
+        filt3 = "";
         
+        console.log(result.recordset);
         res.json(result.recordset);
         sql.close();
     } catch (err) {
@@ -141,6 +149,69 @@ app.post('/cli', async (req, res) => {
   }
 });
 
+app.post('/prov', async (req, res) => {
+  try {
+    const dataReceived = req.body;
+    filt1 = dataReceived.filtro1;
+    filt2 = dataReceived.filtro2;
+    filt3 = dataReceived.filtro3;
+
+    // Realizar una solicitud fetch
+    const response = await fetch("http://localhost:8000/suppliers");
+
+    if (!response.ok) {
+      throw new Error("La solicitud fetch no tuvo éxito");
+    }
+
+    const data = await response.json();
+
+    // Realizar cualquier procesamiento necesario con los datos
+
+    // Crear un objeto de respuesta
+    const outputData = {
+      mensaje: 'Datos procesados correctamente',
+      resultado: data  // Utiliza los datos de la respuesta de la solicitud fetch
+    };
+
+    // Enviar datos de salida como JSON
+    res.json(outputData);
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    res.status(500).json({ mensaje: 'Error en la solicitud' }); // Manejar errores de manera adecuada
+  }
+});
+
+app.post('/inv', async (req, res) => {
+  try {
+    const dataReceived = req.body;
+    filt1 = dataReceived.filtro1;
+    filt2 = dataReceived.filtro2;
+    filt3 = dataReceived.filtro3;
+
+    // Realizar una solicitud fetch
+    const response = await fetch("http://localhost:8000/stockItems");
+
+    if (!response.ok) {
+      throw new Error("La solicitud fetch no tuvo éxito");
+    }
+
+    const data = await response.json();
+
+    // Realizar cualquier procesamiento necesario con los datos
+
+    // Crear un objeto de respuesta
+    const outputData = {
+      mensaje: 'Datos procesados correctamente',
+      resultado: data  // Utiliza los datos de la respuesta de la solicitud fetch
+    };
+
+    // Enviar datos de salida como JSON
+    res.json(outputData);
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    res.status(500).json({ mensaje: 'Error en la solicitud' }); // Manejar errores de manera adecuada
+  }
+});
 
 //========================listen
 
