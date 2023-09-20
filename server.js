@@ -103,8 +103,7 @@ app.get('/stockItems', async (req, res) => {
         filt1 = "";
         filt2 = "";
         filt3 = "";
-        
-        console.log(result.recordset);
+
         res.json(result.recordset);
         sql.close();
     } catch (err) {
