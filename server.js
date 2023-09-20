@@ -29,12 +29,12 @@ const query3 = `BuscarStockItemsConFiltros  @miDato1, @miDato2`;
 app.use(bodyParser.json());
 app.use(cors());
 
-
+//LAPTOP-KGGQABLE
 // Configura la cadena de conexión
 const config = {
   user: 'RestFullApi',
   password: 'true',
-  server: 'True', // Cambia esto a la dirección de tu servidor SQL Server
+  server: 'LAPTOP-KGGQABLE', // Cambia esto a la dirección de tu servidor SQL Server
   database: 'WideWorldImporters',
   options: {
     trustServerCertificate: true, 
