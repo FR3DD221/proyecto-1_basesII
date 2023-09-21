@@ -94,20 +94,25 @@
 <!-- =================================================================================== -->
     <!-- Seccion del modulo de ventas -->
     <div id="cont4" class="inputContainer" style="display: none;">
-        <input id="filterCli0" value="" class="input" type="text" placeholder="Ingrese un nombre"></input>
-        <input id="filterCli1" value="" class="input" type="text" placeholder="Ingrese una categoria"></input>
-        <input id="filterCli2" value="" class="input" type="text" placeholder="Ingrese un metodo de entrega"></input>
+        <input id="filterVen0" value="" class="input2" type="number" placeholder="Ingrese un numero de factura"></input>
+        <input id="filterVen1" value="" class="input" type="text" placeholder="Ingrese un cliente"></input>
+        <input id="filterVen2" value="" class="input" type="text" placeholder="Ingrese un metodo de entrega"></input>
+        <input type="date" id="filterVen3" value="" class="input3">
+        <input type="date" id="filterVen4" value="" class="input3">
+        <input id="filterVen5" value="" class="input2" type="number" placeholder="Ingrese el monto inicial de su rango"></input>
+        <input id="filterVen6" value="" class="input2" type="number" placeholder="Ingrese el monto final de su rango"></input>
 
-        <button id="consultC" class="btn">Consultar</button>
+        <button id="consultV" class="btn">Consultar</button>
 
         <center><div class="container">
-            <center><table id="tableClient" >
+            <center><table id="tableVen" >
                 <thead>
                     <tr>
-                        <th>Nombre del cliente</th>
-                        <th>Categoría</th>
+                        <th>Número de factura</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
                         <th>Metodo de entrega</th>
-                        <th>Opciones</th>
+                        <th>Monto</th>
                     </tr>   
                 </thead>
                 <tbody>
@@ -116,6 +121,24 @@
         </div></center>
     </div>
 
+
+    <dialog id="error1" onclick="close()" class="dialogErr">
+        <h2>Error</h2>
+        <p>Consulta invalida, si introduces una fecha, debe ingresar la otra, para asi crear el rango</p>
+        <p>Haz click para cerrar esta ventana</p>
+    </dialog>
+
+    <dialog id="error2" onclick="close()" class="dialogErr">
+        <h2>Error</h2>
+        <p>Consulta invalida, si introduces un monto, debe ingresar el otro, para asi crear el rango</p>
+        <p>Haz click para cerrar esta ventana</p>
+    </dialog>
+
+    <dialog id="error3" onclick="close()" class="dialogErr">
+        <h2>Error</h2>
+        <p>Consulta invalida, no se encontraron resultados para esa consulta</p>
+        <p>Haz click para cerrar esta ventana</p>
+    </dialog>
 
     <dialog class="dialog1" id="pop-it">
         <center><div id="mapCon"></div></center>

@@ -32,6 +32,24 @@ const tableI = document.getElementById("tableInv");
 const btnConI = document.getElementById("consultI");
 
 
+//=========================================================================
+const cont4 = document.getElementById("cont4");
+const inpVen0 = document.getElementById("filterVen0");
+const inpVen1 = document.getElementById("filterVen1");
+const inpVen2 = document.getElementById("filterVen2");
+const inpVen3 = document.getElementById("filterVen3");
+const inpVen4 = document.getElementById("filterVen4");
+const inpVen5 = document.getElementById("filterVen5");
+const inpVen6 = document.getElementById("filterVen6");
+const tableV = document.getElementById("tableVen");
+const btnConV = document.getElementById("consultV");
+
+//Errores
+const error1 = document.getElementById("error1");
+const error2 = document.getElementById("error2");
+const error3 = document.getElementById("error3");
+
+
 btnM.addEventListener("click", function () {
   const x = document.getElementById("pop-it");
   x.close()
@@ -42,6 +60,7 @@ btnM.addEventListener("click", function () {
 let tempC;
 let tempP;
 let tempI;
+let tempV;
 
 //Sección de funcionalidad del menu pricipal
 btnCli.addEventListener("click", function () {
@@ -81,6 +100,7 @@ btnVen.addEventListener("click", function () {
   btnVen.style.display = "none";
   btnEst.style.display = "none";
   btnBack.style.display = "block";
+  cont4.style.display = "block";
 });
 
 btnEst.addEventListener("click", function () {
@@ -102,9 +122,11 @@ btnBack.addEventListener("click", function () {
   cont1.style.display = "none";
   cont2.style.display = "none";
   cont3.style.display = "none";
+  cont4.style.display = "none";
   blanquearTabla("tableClient");
   blanquearTabla("tableProv");
   blanquearTabla("tableInv");
+  blanquearTabla("tableVen");
 });
 
 function blanquearTabla(nameTable) {
@@ -153,34 +175,43 @@ btnConC.addEventListener("click", function () {
 });
 
 function fillTableC(clientData) {
-  for (x = 0; x < clientData.length; x++) {
-    var fila = document.createElement("tr");
-    var nombreCliente = document.createElement("td");
-    nombreCliente.textContent = clientData[x].NombreCliente;
-    var categoria = document.createElement("td");
-    categoria.textContent = clientData[x].categoria;
-    var metodoEntrega = document.createElement("td");
-    metodoEntrega.textContent = clientData[x].DeliveryMethod;
 
-    var boton = document.createElement("td");
-    var botonElement = document.createElement("button");
-    botonElement.textContent = "Detalles";
-    botonElement.classList.add("button-80");
-    botonElement.id = x;
-
-    botonElement.addEventListener("click", function (event) {
-      showDetailsC(event.currentTarget.id);
-    });
-
-    boton.appendChild(botonElement);
-
-    fila.appendChild(nombreCliente);
-    fila.appendChild(categoria);
-    fila.appendChild(metodoEntrega);
-    fila.appendChild(boton);
-
-    tableC.querySelector("tbody").appendChild(fila);
+  if (clientData.length != 0) {
+    for (x = 0; x < clientData.length; x++) {
+      var fila = document.createElement("tr");
+      var nombreCliente = document.createElement("td");
+      nombreCliente.textContent = clientData[x].NombreCliente;
+      var categoria = document.createElement("td");
+      categoria.textContent = clientData[x].categoria;
+      var metodoEntrega = document.createElement("td");
+      metodoEntrega.textContent = clientData[x].DeliveryMethod;
+  
+      var boton = document.createElement("td");
+      var botonElement = document.createElement("button");
+      botonElement.textContent = "Detalles";
+      botonElement.classList.add("button-80");
+      botonElement.id = x;
+  
+      botonElement.addEventListener("click", function (event) {
+        showDetailsC(event.currentTarget.id);
+      });
+  
+      boton.appendChild(botonElement);
+  
+      fila.appendChild(nombreCliente);
+      fila.appendChild(categoria);
+      fila.appendChild(metodoEntrega);
+      fila.appendChild(boton);
+  
+      tableC.querySelector("tbody").appendChild(fila);
+    }
+  } else {
+    error3.showModal();
+    inpCli0.value = "";
+    inpCli1.value = "";
+    inpCli2.value = "";
   }
+
 }
 
 function showDetailsC(id) {
@@ -285,33 +316,41 @@ btnConP.addEventListener("click", function () {
 });
 
 function fillTableP(clientProv) {
-  for (x = 0; x < clientProv.length; x++) {
-    var fila = document.createElement("tr");
-    var nombreCliente = document.createElement("td");
-    nombreCliente.textContent = clientProv[x].supplierName;
-    var categoria = document.createElement("td");
-    categoria.textContent = clientProv[x].categoryName;
-    var metodoEntrega = document.createElement("td");
-    metodoEntrega.textContent = clientProv[x].metodoEntrega;
 
-    var boton = document.createElement("td");
-    var botonElement = document.createElement("button");
-    botonElement.textContent = "Detalles";
-    botonElement.classList.add("button-80");
-    botonElement.id = x;
-
-    botonElement.addEventListener("click", function (event) {
-      showDetailsP(event.currentTarget.id);
-    });
-
-    boton.appendChild(botonElement);
-
-    fila.appendChild(nombreCliente);
-    fila.appendChild(categoria);
-    fila.appendChild(metodoEntrega);
-    fila.appendChild(boton);
-
-    tableP.querySelector("tbody").appendChild(fila);
+  if (clientProv.length != 0) {
+    for (x = 0; x < clientProv.length; x++) {
+      var fila = document.createElement("tr");
+      var nombreCliente = document.createElement("td");
+      nombreCliente.textContent = clientProv[x].supplierName;
+      var categoria = document.createElement("td");
+      categoria.textContent = clientProv[x].categoryName;
+      var metodoEntrega = document.createElement("td");
+      metodoEntrega.textContent = clientProv[x].metodoEntrega;
+  
+      var boton = document.createElement("td");
+      var botonElement = document.createElement("button");
+      botonElement.textContent = "Detalles";
+      botonElement.classList.add("button-80");
+      botonElement.id = x;
+  
+      botonElement.addEventListener("click", function (event) {
+        showDetailsP(event.currentTarget.id);
+      });
+  
+      boton.appendChild(botonElement);
+  
+      fila.appendChild(nombreCliente);
+      fila.appendChild(categoria);
+      fila.appendChild(metodoEntrega);
+      fila.appendChild(boton);
+  
+      tableP.querySelector("tbody").appendChild(fila);
+    }
+  } else {
+    error3.showModal();
+    inpPro0.value = "";
+    inpPro1.value = "";
+    inpPro2.value = "";
   }
 }
 
@@ -419,34 +458,41 @@ btnConI.addEventListener("click", function () {
 });
 
 function fillTableI(clientInv) {
+
+  if (clientInv.length != 0) {
+    for (x = 0; x < clientInv.length; x++) {
+      var fila = document.createElement("tr");
+      var nombreCliente = document.createElement("td");
+      nombreCliente.textContent = clientInv[x].StockItemName;
+      var categoria = document.createElement("td");
+      categoria.textContent = clientInv[x].SuppliernName;
+      var metodoEntrega = document.createElement("td");
+      metodoEntrega.textContent = clientInv[x].cantidad;
   
-  for (x = 0; x < clientInv.length; x++) {
-    var fila = document.createElement("tr");
-    var nombreCliente = document.createElement("td");
-    nombreCliente.textContent = clientInv[x].StockItemName;
-    var categoria = document.createElement("td");
-    categoria.textContent = clientInv[x].SuppliernName;
-    var metodoEntrega = document.createElement("td");
-    metodoEntrega.textContent = clientInv[x].cantidad;
-
-    var boton = document.createElement("td");
-    var botonElement = document.createElement("button");
-    botonElement.textContent = "Detalles";
-    botonElement.classList.add("button-80");
-    botonElement.id = x;
-
-    botonElement.addEventListener("click", function (event) {
-      showDetailsI(event.currentTarget.id);
-    });
-
-    boton.appendChild(botonElement);
-
-    fila.appendChild(nombreCliente);
-    fila.appendChild(categoria);
-    fila.appendChild(metodoEntrega);
-    fila.appendChild(boton);
-
-    tableI.querySelector("tbody").appendChild(fila);
+      var boton = document.createElement("td");
+      var botonElement = document.createElement("button");
+      botonElement.textContent = "Detalles";
+      botonElement.classList.add("button-80");
+      botonElement.id = x;
+  
+      botonElement.addEventListener("click", function (event) {
+        showDetailsI(event.currentTarget.id);
+      });
+  
+      boton.appendChild(botonElement);
+  
+      fila.appendChild(nombreCliente);
+      fila.appendChild(categoria);
+      fila.appendChild(metodoEntrega);
+      fila.appendChild(boton);
+  
+      tableI.querySelector("tbody").appendChild(fila);
+    }
+  } else {
+    error3.showModal();
+    inpInv0.value = "";
+    inpInv1.value = "";
+    inpInv2.value = "";
   }
 }
 
@@ -502,6 +548,169 @@ function showDetailsI(id) {
 
   L.marker([latitud, longitud]).addTo(map);
   
+  
+  dialog.showModal();
+}
+
+
+//Modulo cliente inventario
+btnConV.addEventListener("click", function () { 
+
+  if (inpVen3.value == "" && inpVen4.value != "") {
+    error1.showModal();
+    inpVen0.value = "";
+    inpVen1.value = "";
+    inpVen2.value = "";
+    inpVen3.value = "";
+    inpVen4.value = "";
+    inpVen5.value = "";
+    inpVen6.value = "";
+    return;
+  } else if (inpVen3.value != "" && inpVen4.value == "") {
+    error1.showModal();
+    inpVen0.value = "";
+    inpVen1.value = "";
+    inpVen2.value = "";
+    inpVen3.value = "";
+    inpVen4.value = "";
+    inpVen5.value = "";
+    inpVen6.value = "";
+    return;
+  } else if (inpVen5.value == "" && inpVen6.value != "") {
+    error2.showModal();
+    inpVen0.value = "";
+    inpVen1.value = "";
+    inpVen2.value = "";
+    inpVen3.value = "";
+    inpVen4.value = "";
+    inpVen5.value = "";
+    inpVen6.value = "";
+    return;
+  } else if (inpVen5.value != "" && inpVen6.value == "") {
+    error2.showModal();
+    inpVen0.value = "";
+    inpVen1.value = "";
+    inpVen2.value = "";
+    inpVen3.value = "";
+    inpVen4.value = "";
+    inpVen5.value = "";
+    inpVen6.value = "";
+    return;
+  }
+
+  var textData = {
+      filtro1: inpVen0.value,
+      filtro2: inpVen1.value,
+      filtro3: inpVen2.value,
+      filtro4: inpVen3.value,
+      filtro5: inpVen4.value,
+      filtro6: inpVen5.value,
+      filtro7: inpVen6.value,
+  };
+
+  const url1 = "http://localhost:8000/ven";
+
+  fetch(url1, {
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json",
+      },
+      body: JSON.stringify(textData),
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error('La solicitud fetch no tuvo éxito');
+    }
+    return response.json(); // Convertir la respuesta a JSON
+  })
+  .then((data) => {
+    // Consultar los datos de la respuesta de la API
+
+    blanquearTabla("tableVen");
+    tempV = data.resultado;
+    fillTableV(data.resultado);
+  })
+  .catch((error) => {
+    console.error('Error en la solicitud:', error);
+  });
+});
+
+function fillTableV(clientVen) {
+  if (clientVen.length != 0) {
+    for (x = 0; x < clientVen.length; x++) {
+      var fila = document.createElement("tr");
+      var nombreCliente = document.createElement("td");
+      nombreCliente.textContent = clientVen[x].numeroFactura;
+      var categoria = document.createElement("td");
+      categoria.textContent = clientVen[x].fecha.substring(0, 10);
+      var metodoEntrega = document.createElement("td");
+      metodoEntrega.textContent = clientVen[x].nombreCliente;
+      var fecha = document.createElement("td");
+      fecha.textContent = clientVen[x].MetodoEntrega;
+      var monto = document.createElement("td");
+      monto.textContent = clientVen[x].montoImpuesto;
+  
+      var boton = document.createElement("td");
+      var botonElement = document.createElement("button");
+      botonElement.textContent = "Detalles";
+      botonElement.classList.add("button-80");
+      botonElement.id = x;
+  
+      botonElement.addEventListener("click", function (event) {
+        showDetailsV(event.currentTarget.id);
+      });
+  
+      boton.appendChild(botonElement);
+  
+      fila.appendChild(nombreCliente);
+      fila.appendChild(categoria);
+      fila.appendChild(metodoEntrega);
+      fila.appendChild(fecha);
+      fila.appendChild(monto);
+      fila.appendChild(boton);
+  
+      tableV.querySelector("tbody").appendChild(fila);
+    }
+  } else {
+    error3.showModal();
+    inpVen0.value = "";
+    inpVen1.value = "";
+    inpVen2.value = "";
+    inpVen3.value = "";
+    inpVen4.value = "";
+    inpVen5.value = "";
+    inpVen6.value = "";
+  }
+}
+
+function showDetailsV(id) {
+  id = parseInt(id);
+  const dialog = document.getElementById("pop-it");
+  dialog.querySelector('#mapCon').innerHTML = "";
+  word = tempV[id].fecha.toString();
+  word = word.substring(0, 10);
+
+  var textos = [
+    "Numero de factura: " + tempV[id].numeroFactura,
+    "Nombre del cliente: " + tempV[id].nombreCliente,
+    "Metodo de entrega: " + tempV[id].MetodoEntrega,
+    "Numero de orden: " + tempV[id].NumeroOrden,
+    "Persona de contacto: " + tempV[id].Contacto,
+    "Nombre del vendedor: " + tempV[id].vendedor,
+    "Fecha de la factura: " + word,
+    "Instrucciones de entrega: " + tempV[id].InstruccionesEntrega,
+    "Detalle de la factura",
+    "Nombre del producto: " + tempV[id].nombreProducto,
+    "Cantidad: " + tempV[id].cantidad,
+    "Precio unitario: " + tempV[id].precioUnitario,
+    "Impuesto aplicado: " + tempV[id].impuesto,
+    "Total por linea: " + tempV[id].montoImpuesto,
+  ];
+
+  for (var i = 0; i < textos.length; i++) {
+    var nuevoParrafo = document.createElement("p");
+    nuevoParrafo.textContent = textos[i];
+    dialog.querySelector('#mapCon').appendChild(nuevoParrafo);
+  }
   
   dialog.showModal();
 }

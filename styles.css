@@ -301,12 +301,65 @@ tbody {
   text-align: center; 
 }
 
+.input3[type="date"] {
+  appearance: none;
+  border: none;
+  outline: none;
+  font-size: larger;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 200;
+  border-bottom: 0.2em solid #e91e63;
+  background: rgba(#e91e63, 0.2);
+  border-radius: 0.2em 0.2em 0 0;
+  padding: 0.4em;
+  color: #e91e63;
+  width: 400px;
+  margin-bottom: 70px;
+  margin-top: 40px; 
+}
+
+.inputContainer {
+  text-align: center; 
+}
 
 .dialog1 {
 	padding: 1rem 3rem;
   width: 60%;
   height: 70%;
   background: linear-gradient(45deg, #e177dd, #5f2c82);
+	max-width: 400px;
+	padding-top: 2rem;
+	border-radius: 20px;
+	border: 0;
+  color: aliceblue;
+	box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
+	animation: fadeIn 1s ease both;
+	&::backdrop {
+		animation: fadeIn 1s ease both;
+		background:  rgba(255, 25, 25, 0.4);
+		z-index: 2;
+		backdrop-filter: blur(20px);
+	}
+	h2 {
+		font-weight: 600;
+		font-size: 2rem;
+		padding-bottom: 1rem;
+	}
+	p {
+		font-size: 1rem;
+		line-height: 1.3rem;
+		padding: 0.5rem 0;
+		a {
+			&:visited {
+				color: rgb(var(--vs-primary));
+			}
+		}
+	}
+}
+
+.dialogErr {
+	padding: 1rem 3rem;
+	background: #ea4444;
 	max-width: 400px;
 	padding-top: 2rem;
 	border-radius: 20px;

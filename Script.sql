@@ -91,6 +91,66 @@ SELECT StockItemName, sup.SupplierName as SuppliernName, col.ColorName AS color,
 END;
 
 
+--Buscar ventas=======================================================================================
+
+IF OBJECT_ID('BuscarVentas', 'P') IS NOT NULL
+BEGIN
+    DROP PROCEDURE BuscarVentas;
+END;
+GO
+CREATE PROCEDURE BuscarVentas
+    @miDato1 INT,
+    @miDato2 NVARCHAR(50),
+    @miDato3 NVARCHAR(50),
+	@FechaInit NVARCHAR(50),
+	@FechaEnd NVARCHAR(50),
+	@montoInit INT,
+	@montoEnd INT
+
+	--@miDato4 NVARCHAR(50),
+    --@miDato5 NVARCHAR(50)
+AS
+BEGIN
+
+	DECLARE @FechaInicio DATETIME
+    DECLARE @FechaFinal DATETIME
+
+    SET @FechaInicio = CONVERT(DATETIME, @FechaInit, 120) -- Suponiendo formato 'YYYY-MM-DD'
+    SET @FechaFinal = CONVERT(DATETIME, @FechaEnd, 120)
+
+	SELECT TOP (8000) InvoiceID numeroFactura, cus.CustomerName nombreCliente, del.DeliveryMethodName MetodoEntrega, factura.CustomerPurchaseOrderNumber NumeroOrden,
+				 p1.FullName Contacto, p2.FullName vendedor, factura.InvoiceDate fecha, factura.DeliveryInstructions InstruccionesEntrega,
+				 items.StockItemName nombreProducto, salesLines.Quantity cantidad, salesLines.UnitPrice precioUnitario, items.TaxRate impuesto,
+				 (salesLines.Quantity * salesLines.UnitPrice) * items.TaxRate/100 montoImpuesto
+					FROM [Sales].[Invoices] factura
+					INNER JOIN [Sales].[Customers] cus ON cus.CustomerID = factura.CustomerID
+					INNER JOIN [Application].[DeliveryMethods] del ON factura.DeliveryMethodID = del.DeliveryMethodID
+					INNER JOIN [Application].[People] p1 ON p1.PersonID = factura.ContactPersonID
+					INNER JOIN [Application].[People] p2 ON p2.PersonID = factura.ContactPersonID
+
+					INNER JOIN [Sales].[Orders] sales ON sales.OrderID = factura.OrderID
+					INNER JOIN [Sales].[OrderLines] salesLines ON salesLines.OrderID = sales.OrderID
+
+					INNER JOIN [Warehouse].[StockItems] items ON items.StockItemID = salesLines.StockItemID
+    WHERE
+        (InvoiceID = @miDato1 or '' = @miDato1)
+
+        AND cus.CustomerName LIKE '%' + @miDato2 + '%'
+
+        AND del.DeliveryMethodName LIKE '%' + @miDato3 + '%'
+
+		AND (factura.InvoiceDate BETWEEN @FechaInicio AND @FechaFinal
+		OR @FechaInit = '' OR @FechaEnd = '')
+
+		AND ((salesLines.Quantity * salesLines.UnitPrice) * items.TaxRate/100 >= @montoInit AND (salesLines.Quantity * salesLines.UnitPrice) * items.TaxRate/100  <= @montoEnd
+		OR @montoInit = '' OR @montoEnd = '')
+    ORDER BY InvoiceID ASC;
+END;
+
+
 EXEC BuscarClientesConFiltros  '',  '',  '';
 EXEC BuscarProvedoresConFiltros  '',  '',  '';
 EXEC BuscarStockItemsConFiltros '','', 1
+
+EXEC BuscarVentas '' ,  '',  '', '2012-01-01', '2014-01-01', '200', '300';
+EXEC BuscarVentas '' ,  '',  '', '', '', '', '';
