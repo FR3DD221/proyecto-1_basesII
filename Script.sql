@@ -118,7 +118,7 @@ BEGIN
     SET @FechaInicio = CONVERT(DATETIME, @FechaInit, 120) -- Suponiendo formato 'YYYY-MM-DD'
     SET @FechaFinal = CONVERT(DATETIME, @FechaEnd, 120)
 
-	SELECT TOP (8000) InvoiceID numeroFactura, cus.CustomerName nombreCliente, del.DeliveryMethodName MetodoEntrega, factura.CustomerPurchaseOrderNumber NumeroOrden,
+	SELECT TOP (3000) InvoiceID numeroFactura, cus.CustomerName nombreCliente, del.DeliveryMethodName MetodoEntrega, factura.CustomerPurchaseOrderNumber NumeroOrden,
 				 p1.FullName Contacto, p2.FullName vendedor, factura.InvoiceDate fecha, factura.DeliveryInstructions InstruccionesEntrega,
 				 items.StockItemName nombreProducto, salesLines.Quantity cantidad, salesLines.UnitPrice precioUnitario, items.TaxRate impuesto,
 				 (salesLines.Quantity * salesLines.UnitPrice) * items.TaxRate/100 montoImpuesto
@@ -154,3 +154,195 @@ EXEC BuscarStockItemsConFiltros '','', 1
 
 EXEC BuscarVentas '' ,  '',  '', '2012-01-01', '2014-01-01', '200', '300';
 EXEC BuscarVentas '' ,  '',  '', '', '', '', '';
+
+--================================================================================
+--ESTADISTICAS
+--================================================================================
+
+--Estadistica 1
+IF OBJECT_ID('BuscarE1', 'P') IS NOT NULL
+BEGIN
+    DROP PROCEDURE BuscarE1;
+END;
+GO
+CREATE PROCEDURE BuscarE1
+    @miDato1 NVARCHAR(50),
+    @miDato2 NVARCHAR(50)
+AS
+BEGIN
+
+
+    SELECT 
+            CASE
+                WHEN GROUPING(supC.SupplierCategoryName) = 1 THEN concat('Total del provedor ',  sup.SupplierName)
+                ELSE sup.SupplierName
+            END AS provedor,
+
+            CASE
+                WHEN GROUPING(supC.SupplierCategoryName) = 1 THEN 'Total de categoria'
+                ELSE supC.SupplierCategoryName
+            END AS categoria, 
+
+            MAX(purLines.ReceivedOuters * ExpectedUnitPricePerOuter) montoAlto, 
+            MIN(purLines.ReceivedOuters * ExpectedUnitPricePerOuter) montoBajo, 
+            AVG(purLines.ReceivedOuters * ExpectedUnitPricePerOuter) promedioVentas
+
+                FROM [Purchasing].[PurchaseOrders] pur
+                INNER JOIN [Purchasing].[PurchaseOrderLines] purLines ON pur.PurchaseOrderID = purLines.PurchaseOrderID
+                INNER JOIN [Purchasing].[Suppliers] sup ON sup.SupplierID = pur.SupplierID
+                INNER JOIN [Purchasing].[SupplierCategories] supC ON supC.SupplierCategoryID = sup.SupplierCategoryID
+
+    WHERE sup.SupplierName LIKE '%' + @miDato1 + '%' AND supC.SupplierCategoryName LIKE '%' + @miDato2 + '%' 
+    GROUP BY ROLLUP (sup.SupplierName, supC.SupplierCategoryName)
+END;
+
+
+EXEC BuscarE1 '','';
+
+--Estadistica 2
+IF OBJECT_ID('BuscarE2', 'P') IS NOT NULL
+BEGIN
+    DROP PROCEDURE BuscarE2;
+END;
+GO
+CREATE PROCEDURE BuscarE2
+    @miDato1 NVARCHAR(50),
+    @miDato2 NVARCHAR(50)
+AS
+BEGIN
+
+	SELECT  
+
+		CASE
+			WHEN GROUPING(cat.CustomerCategoryName) = 1 AND GROUPING(cus.CustomerName) = 1 THEN 'Total comprado por los clientes'
+			WHEN GROUPING(cat.CustomerCategoryName) = 1 THEN concat('Total comprado por  ',  cus.CustomerName)
+			ELSE cus.CustomerName
+		END AS Nombrecliente,
+
+		CASE
+			WHEN GROUPING(cat.CustomerCategoryName) = 1 AND GROUPING(cus.CustomerName) = 1 THEN 'Total comprado por todas las categorias'
+			WHEN GROUPING(cat.CustomerCategoryName) = 1 THEN 'Total de comprado de la categoria'
+			ELSE cat.CustomerCategoryName
+		END AS categoria, 
+
+		MAX((facturaLines.Quantity * facturaLines.UnitPrice)*TaxRate/100  + facturaLines.Quantity * facturaLines.UnitPrice)  montoAlto, 
+		MIN((facturaLines.Quantity * facturaLines.UnitPrice)*TaxRate/100  + facturaLines.Quantity * facturaLines.UnitPrice) montoBajo,
+		AVG((facturaLines.Quantity * facturaLines.UnitPrice)*TaxRate/100  + facturaLines.Quantity * facturaLines.UnitPrice)  promedioCompras
+
+				FROM [Sales].[Invoices] factura
+				INNER JOIN  [Sales].[InvoiceLines] facturaLines ON factura.InvoiceID = facturaLines.InvoiceID
+				INNER JOIN  [Sales].[Customers] cus ON cus.CustomerID = factura.CustomerID
+				INNER JOIN [Sales].[CustomerCategories] cat ON cat.CustomerCategoryID = cus.CustomerCategoryID
+
+	WHERE cus.CustomerName LIKE '%' + @miDato1 + '%' AND cat.CustomerCategoryName LIKE '%' + @miDato2 + '%' 
+	GROUP BY ROLLUP (cus.CustomerName, cat.CustomerCategoryName)
+END;
+
+EXEC BuscarE2 '','';
+
+
+--Estadistica 3
+
+IF OBJECT_ID('BuscarE3', 'P') IS NOT NULL
+BEGIN
+    DROP PROCEDURE BuscarE3;
+END;
+GO
+CREATE PROCEDURE BuscarE3
+    @Anno NVARCHAR(50)
+AS
+BEGIN
+
+    DECLARE @AnnoDate DATETIME
+
+    SET @AnnoDate = CAST(@Anno + '-01-01' AS DATE);
+
+
+    SELECT TOP 5    YEAR(sales.InvoiceDate) año, 
+                    items.StockItemName producto, 
+                    SUM((salesL.Quantity * salesL.UnitPrice) * salesL.TaxRate/100 + (salesL.Quantity * salesL.UnitPrice)) TotalVendido,
+                    DENSE_RANK() OVER (PARTITION BY YEAR(sales.InvoiceDate) ORDER BY SUM((salesL.Quantity * salesL.UnitPrice) * salesL.TaxRate/100 + (salesL.Quantity * salesL.UnitPrice)) DESC) AS Ranking
+                    FROM [Warehouse].[StockItems] items
+                    INNER JOIN [Sales].[InvoiceLines] salesL ON salesL.StockItemID = items.StockItemID
+                    INNER JOIN [Sales].[Invoices] sales ON sales.InvoiceID = salesL.InvoiceID
+
+    WHERE YEAR(sales.InvoiceDate) = YEAR(@AnnoDate)
+    GROUP BY YEAR(sales.InvoiceDate),  items.StockItemName 
+
+END;
+
+EXEC BuscarE3 '2015';
+
+
+--Estadistica 4
+IF OBJECT_ID('BuscarE4', 'P') IS NOT NULL
+BEGIN
+    DROP PROCEDURE BuscarE4;
+END;
+GO
+CREATE PROCEDURE BuscarE4
+	@AnnoI NVARCHAR(50),
+	@AnnoE NVARCHAR(50)
+AS
+BEGIN
+
+	DECLARE @AnnoIDate DATETIME
+	DECLARE @AnnoEDate DATETIME
+
+	SET @AnnoIDate = CAST(@AnnoI + '-01-01' AS DATE);
+	SET @AnnoEDate = CAST(@AnnoE + '-01-01' AS DATE);
+
+	
+
+	SELECT TOP 5 YEAR(factura.InvoiceDate) año,
+		CustomerName Nombre,
+		count(*) cantidadFacturas,
+		SUM((facturaLines.Quantity * facturaLines.UnitPrice) * facturaLines.TaxRate/100 + (facturaLines.Quantity * facturaLines.UnitPrice)) TotalComprado,
+		DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS RankingFacturas
+	
+
+		FROM	[Sales].[Invoices] factura
+		INNER JOIN [Sales].[Customers] cus ON cus.CustomerID = factura.CustomerID
+		INNER JOIN [Sales].[InvoiceLines] facturaLines ON facturaLines.InvoiceID = factura.InvoiceID
+	WHERE YEAR(factura.InvoiceDate) >= YEAR(@AnnoIDate) AND YEAR(factura.InvoiceDate) <= YEAR(@AnnoEDate)
+	GROUP BY YEAR(factura.InvoiceDate), CustomerName
+
+END;
+
+EXEC BuscarE4 '2013', '2015';
+
+--Estadistica 5
+IF OBJECT_ID('BuscarE5', 'P') IS NOT NULL
+BEGIN
+    DROP PROCEDURE BuscarE5;
+END;
+GO
+CREATE PROCEDURE BuscarE5
+	@AnnoI NVARCHAR(50),
+	@AnnoE NVARCHAR(50)
+AS
+BEGIN
+
+	DECLARE @AnnoIDate DATETIME
+	DECLARE @AnnoEDate DATETIME
+
+	SET @AnnoIDate = CAST(@AnnoI + '-01-01' AS DATE);
+	SET @AnnoEDate = CAST(@AnnoE + '-01-01' AS DATE);
+
+	
+
+	SELECT	TOP 5 YEAR(pur.orderDate) año, 
+			SupplierName,
+			COUNT(*) cantidadOrdenes,
+			SUM(purLines.ReceivedOuters * purLines.ExpectedUnitPricePerOuter) monto,
+			DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS RankingFacturas
+
+					FROM [Purchasing].[PurchaseOrders] pur
+					INNER JOIN [Purchasing].[Suppliers] sup ON sup.SupplierID = pur.SupplierID
+					INNER JOIN [Purchasing].[PurchaseOrderLines] purLines ON purLines.PurchaseOrderID = pur.PurchaseOrderID
+	WHERE YEAR(pur.orderDate) >= YEAR(@AnnoIDate) AND YEAR(pur.orderDate) <= YEAR(@AnnoEDate)
+	GROUP BY YEAR(pur.orderDate), SupplierName
+
+END;
+
+EXEC BuscarE5 '2013', '2015';

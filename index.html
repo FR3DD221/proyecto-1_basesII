@@ -122,6 +122,96 @@
     </div>
 
 
+<!-- =================================================================================== -->
+    <!-- Seccion del modulo de estadisticas -->
+    <div id="cont5" class="inputContainer" style="display: none;">
+        <button class="glow-on-hover" id="estadistica1">Compra promedio</button>  
+        <button class="glow-on-hover" id="estadistica3">Venta promedio</button>  
+        <button class="glow-on-hover" id="estadistica2">Top 5 productos más vendidos</button>
+        <button class="glow-on-hover" id="estadistica4">Top 5 productos más facturados</button>
+        <button class="glow-on-hover" id="estadistica5">Top 5 proveedores más solicitados</button>  
+    </div>
+
+    <center><div id="stat1Cont" class="container" style="display: none;">
+        <center><table id="tableStat1" >
+            <thead>
+                <tr>
+                    <th>Proveedor</th>
+                    <th>Categoría</th>
+                    <th>Monto alto</th>
+                    <th>Monto bajo</th>
+                    <th>Promedio de ventas</th>
+                </tr>   
+            </thead>
+            <tbody>
+            </tbody>
+        </table></center>
+    </div></center>
+
+    <center><div id="stat3Cont" class="container" style="display: none;">
+        <center><table id="tableStat3" >
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Categoría</th>
+                    <th>Monto alto</th>
+                    <th>Monto bajo</th>
+                    <th>Promedio de compras</th>
+                </tr>   
+            </thead>
+            <tbody>
+            </tbody>
+        </table></center>
+    </div></center>
+
+    <center><div id="stat2Cont" class="container" style="display: none;">
+        <center><table id="tableStat2" >
+            <thead>
+                <tr>
+                    <th>Año</th>
+                    <th>Producto</th>
+                    <th>Total vendido</th>
+                </tr>   
+            </thead>
+            <tbody>
+            </tbody>
+        </table></center>
+    </div></center>
+
+    <center><div id="stat4Cont" class="container" style="display: none;">
+        <center><table id="tableStat4" >
+            <thead>
+                <tr>
+                    <th>Año</th>
+                    <th>Nombre</th>
+                    <th>Cantidad de facturas</th>
+                    <th>Total comprado</th>
+                </tr>   
+            </thead>
+            <tbody>
+            </tbody>
+        </table></center>
+    </div></center>
+
+    <center><div id="stat5Cont" class="container" style="display: none;">
+        <center><table id="tableStat5" >
+            <thead>
+                <tr>
+                    <th>Año</th>
+                    <th>Nombre proveedor</th>
+                    <th>Cantidad de ordenes</th>
+                    <th>Monto</th>
+                </tr>   
+            </thead>
+            <tbody>
+            </tbody>
+        </table></center>
+    </div></center>
+
+<!-- =================================================================================== -->
+<!-- =================================================================================== -->
+
+
     <dialog id="error1" onclick="close()" class="dialogErr">
         <h2>Error</h2>
         <p>Consulta invalida, si introduces una fecha, debe ingresar la otra, para asi crear el rango</p>
@@ -137,6 +227,12 @@
     <dialog id="error3" onclick="close()" class="dialogErr">
         <h2>Error</h2>
         <p>Consulta invalida, no se encontraron resultados para esa consulta</p>
+        <p>Haz click para cerrar esta ventana</p>
+    </dialog>
+
+    <dialog id="error4" onclick="close()" class="dialogErr">
+        <h2>Error</h2>
+        <p>Debes ingresar una fecha para realizar la consulta</p>
         <p>Haz click para cerrar esta ventana</p>
     </dialog>
 
